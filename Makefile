@@ -9,7 +9,7 @@ all: build/ build/libcapirasure.so
 build/:
 	mkdir build/
 
-build/capi.o: src/capi.c src/capi.h
+build/capi.o: src/capi.c src/capi.h build/
 	$(CC_OBJ)
 
 build/erasure.o: src/erasure.c src/erasure.h
@@ -18,9 +18,15 @@ build/erasure.o: src/erasure.c src/erasure.h
 build/libcapirasure.so: $(OBJECTS)
 	$(CC_LIB) $(OBJECTS)
 
-check: build/libcapirasure.so test/example
+check: build/libcapirasure.so test/example test/file_erasure
 	LD_LIBRARY_PATH=build/ ./test/example
+	LD_LIBRARY_PATH=build/ ./test/file_erasure test/tinytest.bin
 
 test/example: test/example.c
 	$(CC_TEST)
 
+test/file_erasure: test/file_erasure.c
+	$(CC_TEST)
+
+clean:
+	rm -rf build/

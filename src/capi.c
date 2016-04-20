@@ -1,6 +1,7 @@
 #include "capi.h"
 
-struct cxl_afu_h * capi_init(void)
+
+capi_handle * capi_init(void)
 {
 	capi_handle *new;
 	new = cxl_afu_open_dev(DEVICE_PATH);

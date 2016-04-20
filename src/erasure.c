@@ -1,6 +1,41 @@
 #include "erasure.h"
 
 
+int erasure_init(void)
+{
+	afu = capi_init();
+	if (!afu)
+	{
+		fprintf(stderr, "Failed to open CAPI device at " DEVICE_PATH "\n");
+		return 0;
+	}
+
+	return 1;
+}
+
+
+void erasure_cleanup(void)
+{
+	capi_free(afu);
+}
+
+
+int erasure_process_request(erasure_wed *wed)
+{
+	struct timespec sleep_time = {1, 0};
+
+	capi_attach(afu, wed);
+	cxl_mmio_write64(afu, 0, (__u64)wed);
+
+	while (!wed->status)
+	{
+		printf("waiting...\n");
+		nanosleep(&sleep_time, NULL);
+	}
+
+	return wed->status;
+}
+
 
 erasure_wed* erasure_wed_new(void)
 {
@@ -12,13 +47,15 @@ erasure_wed* erasure_wed_new(void)
 	}
 
 	new->status = 0;
+
 	// Use default block size
 	new->block_size = BLOCK_SIZE;
 	new->buffer_size = 0;
+
 	// Set param to encode Reed-Solomon 8:4
 	new->param_s0 = 0;
 	new->param_s1 = RS_8_4;
-	
+
 	new->source0 = NULL;
 	new->source1 = NULL;
 	new->source2 = NULL;
@@ -74,7 +111,6 @@ erasure_wed* erasure_encode_request(char *data, ssize_t len)
 	uint8_t **struct_member;
 	ssize_t overall_size, copy_offset = 0;
 	erasure_wed *new = erasure_wed_new();
-	int i;
 	if (!new)
 	{
 		return NULL;
@@ -85,7 +121,7 @@ erasure_wed* erasure_encode_request(char *data, ssize_t len)
 		return NULL;
 	}
 
-	fprintf(stderr, "[INFO] data at %p is %zd bytes\n", data, len);
+//	fprintf(stderr, "[INFO] data at %p is %zd bytes\n", data, len);
 
 	new->buffer_size = len / 8;
 	if (len % 8)
@@ -95,21 +131,21 @@ erasure_wed* erasure_encode_request(char *data, ssize_t len)
 
 	overall_size = new->buffer_size * 8;
 
-	fprintf(stderr, "[INFO] buffer size: %d\n", new->buffer_size);
-	fprintf(stderr, "[INFO] overall size: %zd\n", overall_size);
+//	fprintf(stderr, "[INFO] buffer size: %d\n", new->buffer_size);
+//	fprintf(stderr, "[INFO] overall size: %zd\n", overall_size);
 	erasure_allocate_buffers(new);
 
 	struct_member = &(new->source0);
 
 	while (copy_offset < overall_size)
 	{
-		fprintf(stderr, "ptr: %p\n", struct_member);
-		fprintf(stderr, "[INFO] %zd more to write\n", len - copy_offset);
-		fprintf(stderr, "[INFO] copy_offset: %zd\n", copy_offset);
+//		fprintf(stderr, "ptr: %p\n", struct_member);
+//		fprintf(stderr, "[INFO] %zd more to write\n", len - copy_offset);
+//		fprintf(stderr, "[INFO] copy_offset: %zd\n", copy_offset);
 		if (len - copy_offset >= new->buffer_size)
 		{
-			fprintf(stderr, "%zd >= %d\n", len - copy_offset, new->buffer_size);
-			fprintf(stderr, "[INFO] data fits in this buffer\n");
+//			fprintf(stderr, "%zd >= %d\n", len - copy_offset, new->buffer_size);
+//			fprintf(stderr, "[INFO] data fits in this buffer\n");
 			memcpy(*struct_member, data + copy_offset, new->buffer_size);
 			copy_offset += new->buffer_size;
 			struct_member++;

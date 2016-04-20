@@ -5,6 +5,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
+
+#include "capi.h"
 
 #define BLOCK_SIZE 8192
 #define WED_ALIGNMENT 128
@@ -38,10 +41,15 @@ typedef struct
 	uint8_t *result3;
 } erasure_wed;
 
+capi_handle *afu;
+
+
+int erasure_init(void);
 erasure_wed* erasure_wed_new(void);
 int erasure_allocte_buffers(erasure_wed *wed);
 void erasure_free_buffers(erasure_wed *wed);
 erasure_wed* erasure_encode_request(char *data, ssize_t len);
 void erasure_wed_free(erasure_wed *wed);
+void erasure_cleanup(void);
 
 #endif
