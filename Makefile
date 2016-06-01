@@ -1,7 +1,8 @@
 LIBRARIES=-lcxl
-CC_OBJ=gcc -g -fpic -Wall -o $@ -c $< 
-CC_LIB=gcc -g -shared $(LIBRARIES) -o $@
-CC_TEST=gcc -g -o $@ $< -Wall -I src/ -L build/ -lcapirasure $(LIBRARIES)
+CC=gcc -g -DDEBUG -Wall -Werror
+CC_OBJ=$(CC) -fpic -o $@ -c $<
+CC_LIB=$(CC) -shared $(LIBRARIES) -o $@
+CC_TEST=$(CC) -o $@ $< -I src/ -L build/ -lcapirasure $(LIBRARIES)
 OBJECTS=build/capi.o build/erasure.o
 
 all: build/ build/libcapirasure.so
@@ -29,4 +30,4 @@ test/file_erasure: test/file_erasure.c
 	$(CC_TEST)
 
 clean:
-	rm -rf build/
+	rm -rf build/ test/example test/file_erasure

@@ -30,6 +30,12 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	if (!erasure_init())
+	{
+		fprintf(stderr, "Failed to initialize erasure coding subsystem\n");
+		return 1;
+	}
+
 	if (decode_request)
 	{
 		printf("Decode functionality not yet implemented\n");
@@ -50,12 +56,6 @@ int main(int argc, char *argv[])
 
 		erasure_wed_free(wed);
 		buffer_free(filedata);
-	}
-
-	if (!erasure_init())
-	{
-		fprintf(stderr, "Failed to initialize erasure coding subsystem\n");
-		return 1;
 	}
 
 	erasure_cleanup();

@@ -49,6 +49,7 @@ erasure_wed* erasure_wed_new(void);
 int erasure_allocte_buffers(erasure_wed *wed);
 void erasure_free_buffers(erasure_wed *wed);
 erasure_wed* erasure_encode_request(char *data, ssize_t len);
+int erasure_process_request(erasure_wed *wed);
 void erasure_wed_free(erasure_wed *wed);
 void erasure_cleanup(void);
 
