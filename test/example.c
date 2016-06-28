@@ -50,6 +50,8 @@ int main()
 	print_data("[s7]\n", wed->source7, wed->buffer_size);
 	capi_attach(afu, wed);
 
+	erasure_wed_print(erasure_wed *wed)
+
 	cxl_mmio_write64(afu, 0, (__u64)wed);
 	while (!wed->status)
 	{

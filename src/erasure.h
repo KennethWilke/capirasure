@@ -11,7 +11,7 @@
 
 #define BLOCK_SIZE 8192
 #define WED_ALIGNMENT 128
-#define DATA_ALIGNMENT 8
+#define DATA_ALIGNMENT 128
 
 #define RS_8_4 0x0703
 
@@ -46,6 +46,7 @@ capi_handle *afu;
 
 int erasure_init(void);
 erasure_wed* erasure_wed_new(void);
+void erasure_wed_print(erasure_wed *wed);
 int erasure_allocte_buffers(erasure_wed *wed);
 void erasure_free_buffers(erasure_wed *wed);
 erasure_wed* erasure_encode_request(char *data, ssize_t len);

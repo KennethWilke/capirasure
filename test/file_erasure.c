@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
 
 		wed = erasure_encode_request(filedata->data, filedata->length);
 
+		erasure_wed_print(erasure_wed *wed)
+
 		erasure_process_request(wed);
 
 		erasure_wed_free(wed);
