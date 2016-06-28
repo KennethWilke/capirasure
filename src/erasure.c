@@ -46,7 +46,13 @@ erasure_wed* erasure_wed_new(void)
 		return NULL;
 	}
 
+	// Zero out states and padding
 	new->status = 0;
+	new->job_counter = 0;
+	new->return_size = 0;
+	new->pad1 = 0;
+	new->pad2 = 0;
+	new->pad3 = 0;
 
 	// Use default block size
 	new->block_size = BLOCK_SIZE;
