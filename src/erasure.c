@@ -129,13 +129,13 @@ erasure_wed* erasure_encode_request(char *data, ssize_t len)
 
 	fprintf(stderr, "[INFO] data at %p is %zd bytes\n", data, len);
 
-	new->buffer_size = len / 8;
-	if (len % 8)
+	new->buffer_size = len / 128;
+	if (len % 128)
 	{
 		new->buffer_size++;
 	}
 
-	overall_size = new->buffer_size * 8;
+	overall_size = new->buffer_size * 128;
 
 	fprintf(stderr, "[INFO] buffer size: %d\n", new->buffer_size);
 	fprintf(stderr, "[INFO] overall size: %zd\n", overall_size);
