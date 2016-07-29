@@ -134,10 +134,10 @@ erasure_wed* erasure_encode_request(char *data, ssize_t len)
 	{
 		new->buffer_size++;
 	}
-	if(new->buffer_size % 128)
+	/*if(new->buffer_size % 128)
 	{
 		new->buffer_size += 128 - (new->buffer_size % 128);
-	}
+	}*/
 
 	overall_size = new->buffer_size * 8;
 
