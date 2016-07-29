@@ -21,10 +21,10 @@ build/libcapirasure.so: $(OBJECTS)
 	$(CC_LIB) $(OBJECTS)
 
 # Test builders
-test/example: test/example.c
+test/example: test/example.c build/libcapirasure.so
 	$(CC_TEST)
 
-test/file_erasure: test/file_erasure.c
+test/file_erasure: test/file_erasure.c build/libcapirasure.so
 	$(CC_TEST)
 
 # Utility commands
